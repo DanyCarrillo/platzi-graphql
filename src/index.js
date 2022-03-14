@@ -5,7 +5,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { readFileSync} = require('fs');
 const {join}  = require('path');
-const resolvers = require('./graphql/resolvers/resolvers');
+const resolvers = require('./graphql/resolvers/main.resolver');
 const app = express();
 const port = process.env.PORT || 3001
 

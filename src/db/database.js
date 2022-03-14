@@ -1,31 +1,31 @@
-const { MongoClient } = require('mongo')
+'use strict'
+
+const { MongoClient } = require('mongodb')
 const {
-    BD_USER,
-    DB_PASSWORD,
     DB_HOST,
     DB_PORT,
     DB_NAME
-} = process.env;
+} = process.env
 
-const mongoUrl = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${BD_NAME}`;
+const mongoUrl = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+let connection
 
-let connection;
-
-async function connectDB(){
-    if(connection) return connection;
+async function connectDB () {
+    if (connection) return connection
 
     let client
-
     try {
-        client = await MongoClient.connect(mongoUrl, { 
+        client = await MongoClient.connect(mongoUrl, {
             useNewUrlParser: true
         })
-        Connection = client.db(DB_NAME);
-    } catch (error) {
-        console.error('Could not connect to database', mongoUrl, error);
-        process.exit(1)
+        connection = client.db(DB_NAME)
     }
-    return connection;
+    catch(error) {
+        console.error ('No se pude conectar a la bd', mongoUrl, error)
+        procces.exit(1)
+    }
+
+    return connection
 }
 
-module.exports = connectDB;
+module.exports = connectDB
