@@ -1,5 +1,5 @@
 const connectDB = require('../../db/database');
-const { ObjectID } = require('mongodb');
+const { ObjectId } = require('mongodb');
 module.exports = {
         getCourses: async () => {
             let db;
@@ -17,11 +17,33 @@ module.exports = {
             let course = {};
            try {
             db = await connectDB();
-            course = await db.collection('courses').findOne({ _id: ObjectID(id)});
+            course = await db.collection('courses').findOne({ _id: ObjectId(id)});
            } catch (error) {
             console.log('ERROR: ', error);
            }
            return course;
+        },
+        getStudents: async () => {
+            let db;
+            let liststudents = [];
+            try {
+                db = await connectDB();
+                liststudents = await db.collection('students').find().toArray();                
+            } catch (error) {
+                console.error(error)
+            }
+            return liststudents
+        },
+        getStudent: async (root, {id}) =>  {
+            let db;
+            let student = {};
+           try {
+            db = await connectDB();
+            student = await db.collection('students').findOne({ _id: ObjectId(id)});
+           } catch (error) {
+            console.log('ERROR: ', error);
+           }
+           return student;
         }
     
 }
