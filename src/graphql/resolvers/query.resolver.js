@@ -23,7 +23,7 @@ module.exports = {
            }
            return course;
         },
-        getStudents: async () => {
+        getPeoples: async () => {
             let db;
             let liststudents = [];
             try {
@@ -34,7 +34,7 @@ module.exports = {
             }
             return liststudents
         },
-        getStudent: async (root, {id}) =>  {
+        getPerson: async (root, {id}) =>  {
             let db;
             let student = {};
            try {
@@ -44,6 +44,26 @@ module.exports = {
             console.log('ERROR: ', error);
            }
            return student;
+        },
+        globalSearch: async (root, {keyword}) =>  {
+            let db;
+            let items;
+            let courses;
+            let people;
+           try {
+            db = await connectDB();
+            courses = await db.collection('courses').find({
+                $text: { $search: keyword }
+            }).toArray();
+            people = await db.collection('students').find({
+                $text: { $search: keyword }
+            }).toArray();
+            console.log('students: ', people);
+            items = [...courses, ...people];
+           } catch (error) {
+            console.log('ERROR: ', error);
+           }
+           return items;
         }
     
 }
