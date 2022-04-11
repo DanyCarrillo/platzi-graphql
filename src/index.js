@@ -6,8 +6,10 @@ const { graphqlHTTP } = require('express-graphql');
 const { readFileSync} = require('fs');
 const {join}  = require('path');
 const resolvers = require('./graphql/resolvers/main.resolver');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3001
+const isDev = process.env.NODE_ENV !== 'production';
 
 const typeDefs = readFileSync(
   join(__dirname, './graphql/schema','schema.graphql'),
@@ -19,12 +21,12 @@ const schema = makeExecutableSchema({
   resolvers
 });
 
+app.use(cors());
 // Configurar los resolvers
-
 app.use('/api', graphqlHTTP({
     schema,
     rootValue: resolvers,
-    graphiql: true
+    graphiql: isDev
 }))
 
 app.listen(port, ()=>console.log(`Server is listen in http://localhost:${port}/api`));
